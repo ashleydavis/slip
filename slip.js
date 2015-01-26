@@ -377,7 +377,23 @@ window['Slip'] = (function(){
                     }
 
                     var move = this.getTotalMovement();
-                    this.target.node.style[transformPrefix] = 'translate(0,' + move.y + 'px) ' + hwTopLayerMagic + this.target.baseTransform.value;
+                    var translateStr;
+                    if (this.options && this.options.axis) {
+                        if (this.options.axis === "x") {
+                            translateStr = 'translate(' + move.x + 'px, 0)';
+                        }
+                        else if (this.options.axis === "y") {
+                            translateStr = 'translate(0,' + move.y + 'px)';
+                        }
+                        else if (this.options.axis === "both") {
+                            translateStr = 'translate(' + move.x + 'px,' + move.y + 'px)';
+                        }
+                    }
+                    if (!translateStr) {
+                        // Default to y axis.
+                        translateStr = 'translate(0,' + move.y + 'px)';
+                    }
+                    this.target.node.style[transformPrefix] = translateStr + ' ' + hwTopLayerMagic + this.target.baseTransform.value;
 
                     var height = this.target.height;
                     otherNodes.forEach(function(o){
